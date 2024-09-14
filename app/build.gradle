@@ -1,0 +1,31 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+dependencies {
+    implementation 'org.openjfx:javafx-controls:19.0.2'
+    implementation 'com.jfoenix:jfoenix:9.0.10'
+    implementation 'com.google.code.gson:gson:2.8.8'
+}
+
+application {
+    mainClass = 'me.crystal.main'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'me.crystal.main'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

@@ -1,0 +1,48 @@
+{
+  "applications": [
+    {
+      "name": "Julti",
+      "downloadLink": "https://github.com/DuncanRuns/Julti/releases/latest/download/Julti.zip"
+    },
+    {
+      "name": "AutoHotkey (AHK)",
+      "downloadLink": "https://www.autohotkey.com/download/ahk-install.exe"
+    },
+    {
+      "name": "OBS Studio",
+      "downloadLink": "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-27.1.3-Full-Installer-x64.exe"
+    },
+    {
+      "name": "MultiMC",
+      "downloadLink": "https://github.com/MultiMC/Launcher/releases/latest/download/MultiMC.zip"
+    },
+    {
+      "name": "MultiMC Offline",
+      "downloadLink": "https://github.com/Ponywka/MultiMC5-with-offline/releases/latest/download/OfflineMultiMC.zip"
+    },
+    {
+      "name": "Prism Launcher",
+      "downloadLink": "https://github.com/PrismLauncher/PrismLauncher/releases/latest/download/PrismLauncher.zip"
+    },
+    {
+      "name": "ContariaCalc",
+      "downloadLink": "https://github.com/KingContaria/ContariaCalc/releases/latest/download/ContariaCalc.zip"
+    },
+    {
+      "name": "Ninjabrain Bot",
+      "downloadLink": "https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest/download/Ninjabrain-Bot.zip"
+    },
+    {
+      "name": "ModCheck",
+      "downloadLink": "https://github.com/tildejustin/modcheck/releases/latest/download/modcheck.zip"
+    },
+    {
+      "name": "MapCheck",
+      "downloadLink": "https://github.com/cylorun/Map-Check/releases/latest/download/MapCheck.zip"
+    },
+    {
+      "name": "Fabric Updater",
+      "downloadLink": "https://github.com/tildejustin/fabric-updater/releases/latest/download/fabric-updater.zip"
+    }
+  ]
+}
