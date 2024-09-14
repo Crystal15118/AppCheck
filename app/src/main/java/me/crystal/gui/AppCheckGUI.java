@@ -1,169 +1,221 @@
 package me.crystal.gui;
 
+import me.crystal.logic.AppCheckJson;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
+import java.util.Map;
 
 public class AppCheckGUI {
 
-    private boolean isDarkMode = true;
+    private Map<String, String> downloadLinksMap;
 
-    public void createAndShowGUI() {
-        // Create the frame
-        JFrame frame = new JFrame("Modern Application Installer");
+    public void initializeAndRenderGUI() {
+        JFrame frame = new JFrame("AppCheck");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
-        frame.setLocationRelativeTo(null); // Center window
+        frame.setLocationRelativeTo(null);
 
-        // Create a panel with BorderLayout
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
 
-        // Create a sub-panel for the checkboxes and download button
         JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // Vertical layout
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(Color.WHITE);
         JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.getViewport().setBackground(Color.WHITE);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Create checkboxes for apps
-        JCheckBox jultiCheckBox = new JCheckBox("Julti");
-        JCheckBox ahkCheckBox = new JCheckBox("AutoHotkey (AHK)");
-        JCheckBox obsCheckBox = new JCheckBox("OBS");
-        JCheckBox multiMcCheckBox = new JCheckBox("MultiMC");
-        JCheckBox offlineMcCheckBox = new JCheckBox("MultiMC Offline");
-        JCheckBox prismLauncherCheckBox = new JCheckBox("Prism Launcher");
-        JCheckBox contariaCalcCheckBox = new JCheckBox("ContariaCalc");
-        JCheckBox ninjabrainBotCheckBox = new JCheckBox("Ninjabrain-Bot");
-        JCheckBox modCheckCheckBox = new JCheckBox("ModCheck");
-        JCheckBox mapCheckCheckBox = new JCheckBox("Map Check");
-        JCheckBox fabricUpdaterCheckBox = new JCheckBox("Fabric Updater");
-
-        // Add checkboxes to the content panel
-        contentPanel.add(jultiCheckBox);
-        contentPanel.add(ahkCheckBox);
-        contentPanel.add(obsCheckBox);
-        contentPanel.add(multiMcCheckBox);
-        contentPanel.add(offlineMcCheckBox);
-        contentPanel.add(prismLauncherCheckBox);
-        contentPanel.add(contariaCalcCheckBox);
-        contentPanel.add(ninjabrainBotCheckBox);
-        contentPanel.add(modCheckCheckBox);
-        contentPanel.add(mapCheckCheckBox);
-        contentPanel.add(fabricUpdaterCheckBox);
-
-        // Button to select download folder
+        loadAndDisplayCheckBoxes(contentPanel, frame);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setBackground(Color.WHITE);
         JButton selectFolderButton = new JButton("Select Download Folder");
-        JLabel folderLabel = new JLabel("No folder selected");
+        styleButton(selectFolderButton);
+        JTextField folderTextField = new JTextField("No folder selected", 20);
+        folderTextField.setEditable(true);
+        folderTextField.setForeground(Color.BLACK);
+        folderTextField.setBackground(Color.WHITE);
 
-        // Add action listener for folder selection
         selectFolderButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int result = fileChooser.showOpenDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
-                folderLabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                folderTextField.setText(fileChooser.getSelectedFile().getAbsolutePath());
             }
         });
 
-        // Create a sub-panel for the folder selection and theme button
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topPanel.add(selectFolderButton);
-        topPanel.add(folderLabel);
+        leftPanel.add(selectFolderButton);
+        leftPanel.add(folderTextField);
+        topPanel.add(leftPanel, BorderLayout.WEST);
 
-        // Add a dark/light mode toggle button (sun icon)
-        JButton themeToggleButton = new JButton("☀️");
-        themeToggleButton.addActionListener(e -> toggleTheme(frame, contentPanel));
-        topPanel.add(themeToggleButton);
+        // Right part: Reconnect button
+        JButton reconnectButton = new JButton("Reconnect");
+        styleButton(reconnectButton);
+        reconnectButton.addActionListener(e -> {
+            try {
+                contentPanel.removeAll();
+                loadAndDisplayCheckBoxes(contentPanel, frame);
+                contentPanel.revalidate();
+                contentPanel.repaint();
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(frame, "Error reconnecting: " + exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.setBackground(Color.WHITE);
+        rightPanel.add(reconnectButton);
+        topPanel.add(rightPanel, BorderLayout.EAST);
 
         panel.add(topPanel, BorderLayout.NORTH);
 
-        // Create a download button
-        JButton downloadButton = new JButton("Install Selected Apps");
+        JButton downloadButton = getDownloadButton(folderTextField, frame, contentPanel);
+        styleButton(downloadButton);
+        panel.add(downloadButton, BorderLayout.SOUTH);
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    private JButton getDownloadButton(JTextField folderTextField, JFrame frame, JPanel contentPanel) {
+        JButton downloadButton = new JButton("Install the Selected Apps");
+        styleButton(downloadButton);
         downloadButton.addActionListener(e -> {
-            String downloadFolder = folderLabel.getText();
+            String downloadFolder = folderTextField.getText();
             if ("No folder selected".equals(downloadFolder)) {
                 JOptionPane.showMessageDialog(frame, "Please select a download folder", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            try {
-                if (jultiCheckBox.isSelected()) downloadApp("https://github.com/DuncanRuns/Julti/releases/latest/download/Julti.zip", downloadFolder, "Julti.zip");
-                if (ahkCheckBox.isSelected()) downloadApp("https://www.autohotkey.com/download/ahk-install.exe", downloadFolder, "AutoHotkey.exe");
-                if (obsCheckBox.isSelected()) downloadApp("https://cdn-fastly.obsproject.com/downloads/OBS-Studio-27.1.3-Full-Installer-x64.exe", downloadFolder, "OBS-Installer.exe");
-                if (multiMcCheckBox.isSelected()) downloadApp("https://github.com/MultiMC/Launcher/releases/latest/download/MultiMC.zip", downloadFolder, "MultiMC.zip");
-                if (offlineMcCheckBox.isSelected()) downloadApp("https://github.com/Ponywka/MultiMC5-with-offline/releases/latest/download/OfflineMultiMC.zip", downloadFolder, "OfflineMultiMC.zip");
-                if (prismLauncherCheckBox.isSelected()) downloadApp("https://github.com/PrismLauncher/PrismLauncher/releases/latest/download/PrismLauncher.zip", downloadFolder, "PrismLauncher.zip");
-                if (contariaCalcCheckBox.isSelected()) downloadApp("https://github.com/KingContaria/ContariaCalc/releases/latest/download/ContariaCalc.zip", downloadFolder, "ContariaCalc.zip");
-                if (ninjabrainBotCheckBox.isSelected()) downloadApp("https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest/download/Ninjabrain-Bot.zip", downloadFolder, "Ninjabrain-Bot.zip");
-                if (modCheckCheckBox.isSelected()) downloadApp("https://github.com/tildejustin/modcheck/releases/latest/download/modcheck.zip", downloadFolder, "ModCheck.zip");
-                if (mapCheckCheckBox.isSelected()) downloadApp("https://github.com/cylorun/Map-Check/releases/latest/download/MapCheck.zip", downloadFolder, "MapCheck.zip");
-                if (fabricUpdaterCheckBox.isSelected()) downloadApp("https://github.com/tildejustin/fabric-updater/releases/latest/download/fabric-updater.zip", downloadFolder, "FabricUpdater.zip");
+            boolean anyAppSelected = false;
+            for (Component component : contentPanel.getComponents()) {
+                if (component instanceof JCheckBox checkBox) {
+                    if (checkBox.isSelected()) {
+                        anyAppSelected = true;
+                        break;
+                    }
+                }
+            }
 
-                JOptionPane.showMessageDialog(frame, "All selected applications have been installed.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException ioException) {
-                JOptionPane.showMessageDialog(frame, "Error during download: " + ioException.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if (!anyAppSelected) {
+                JOptionPane.showMessageDialog(frame, "No apps were selected", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                JDialog progressDialog = createProgressDialog(frame);
+                ProgressTask task = new ProgressTask(contentPanel, downloadLinksMap, downloadFolder, progressDialog, downloadButton);
+                task.execute();
+                progressDialog.setVisible(true);
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(frame, "Error: " + exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-        panel.add(downloadButton, BorderLayout.SOUTH);
-
-        // Set dark mode by default
-        applyDarkTheme(contentPanel);
-        frame.add(panel);
-        frame.setVisible(true);
+        return downloadButton;
     }
 
-    // Helper function to download a file from a URL
-    private void downloadApp(String urlString, String downloadFolder, String fileName) throws IOException {
-        URL url = new URL(urlString);
-        Path outputPath = Paths.get(downloadFolder, fileName);
+    private void loadAndDisplayCheckBoxes(JPanel contentPanel, JFrame frame) {
+        try {
+            downloadLinksMap = AppCheckJson.getContentFromAppCheckJson();
 
-        try (BufferedInputStream in = new BufferedInputStream(url.openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(outputPath.toString())) {
-            byte[] dataBuffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
+            for (Map.Entry<String, String> entry : downloadLinksMap.entrySet()) {
+                JCheckBox checkBox = new JCheckBox(entry.getKey());
+                checkBox.setBackground(Color.WHITE);
+                checkBox.setForeground(Color.GREEN);
+                contentPanel.add(checkBox);
             }
+
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(frame, "No connection could be established with the repository", "Connection Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Function to toggle between light and dark mode
-    private void toggleTheme(JFrame frame, JPanel contentPanel) {
-        if (isDarkMode) {
-            applyLightTheme(contentPanel);
-        } else {
-            applyDarkTheme(contentPanel);
-        }
-        isDarkMode = !isDarkMode;
-        SwingUtilities.updateComponentTreeUI(frame);
+    private void styleButton(JButton button) {
+        button.setBackground(Color.GREEN);
+        button.setForeground(Color.WHITE);
     }
 
-    // Apply dark theme
-    private void applyDarkTheme(JPanel panel) {
-        panel.setBackground(Color.DARK_GRAY);
-        panel.setForeground(Color.WHITE);
-        for (Component component : panel.getComponents()) {
-            if (component instanceof JCheckBox) {
-                component.setBackground(Color.DARK_GRAY);
-                component.setForeground(Color.WHITE);
+    private JDialog createProgressDialog(JFrame parentFrame) {
+        JDialog progressDialog = new JDialog(parentFrame, "Downloading...", true);
+        progressDialog.setSize(400, 150);
+        progressDialog.setLocationRelativeTo(parentFrame);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel fileLabel = new JLabel("Downloading: ");
+        JProgressBar progressBar = new JProgressBar(0, 100);
+        progressBar.setStringPainted(true);
+
+        panel.add(fileLabel, BorderLayout.NORTH);
+        panel.add(progressBar, BorderLayout.CENTER);
+        progressDialog.add(panel);
+
+        return progressDialog;
+    }
+
+    class ProgressTask extends SwingWorker<Void, Void> {
+        private JPanel contentPanel;
+        private Map<String, String> downloadLinksMap;
+        private String downloadFolder;
+        private JDialog progressDialog;
+        private JButton downloadButton;
+
+        ProgressTask(JPanel contentPanel, Map<String, String> downloadLinksMap, String downloadFolder, JDialog progressDialog, JButton downloadButton) {
+            this.contentPanel = contentPanel;
+            this.downloadLinksMap = downloadLinksMap;
+            this.downloadFolder = downloadFolder;
+            this.progressDialog = progressDialog;
+            this.downloadButton = downloadButton;
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            downloadButton.setEnabled(false);
+            for (Component component : contentPanel.getComponents()) {
+                if (component instanceof JCheckBox checkBox) {
+                    if (checkBox.isSelected()) {
+                        String downloadLink = downloadLinksMap.get(checkBox.getText());
+                        String fileName = Paths.get(new URL(downloadLink).getPath()).getFileName().toString(); // Use original filename
+                        downloadAppWithProgress(downloadLink, downloadFolder, fileName);
+                    }
+                }
             }
+            return null;
         }
-    }
 
-    // Apply light theme
-    private void applyLightTheme(JPanel panel) {
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.setForeground(Color.BLACK);
-        for (Component component : panel.getComponents()) {
-            if (component instanceof JCheckBox) {
-                component.setBackground(Color.LIGHT_GRAY);
-                component.setForeground(Color.BLACK);
+        @Override
+        protected void done() {
+            progressDialog.dispose();
+            downloadButton.setEnabled(true);
+            JOptionPane.showMessageDialog(progressDialog, "All selected applications have been installed.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        private void downloadAppWithProgress(String urlString, String downloadFolder, String fileName) throws IOException {
+            URL url = new URL(urlString);
+            Path outputPath = Paths.get(downloadFolder, fileName);
+            try (BufferedInputStream in = new BufferedInputStream(url.openStream());
+                 FileOutputStream fileOutputStream = new FileOutputStream(outputPath.toString())) {
+
+                long totalBytes = url.openConnection().getContentLengthLong();
+                long downloadedBytes = 0;
+                byte[] dataBuffer = new byte[1024];
+                int bytesRead;
+                int progress;
+                JProgressBar progressBar = (JProgressBar) ((JPanel) progressDialog.getContentPane().getComponent(0)).getComponent(1); // Get progress bar
+
+                while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                    fileOutputStream.write(dataBuffer, 0, bytesRead);
+                    downloadedBytes += bytesRead;
+                    progress = (int) ((downloadedBytes * 100) / totalBytes);
+                    progressBar.setValue(progress); // Update progress
+                    progressBar.setString("Downloaded: " + progress + "%");
+                }
             }
         }
     }
 }
-

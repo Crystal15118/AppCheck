@@ -2,7 +2,7 @@
   "applications": [
     {
       "name": "Julti",
-      "downloadLink": "https://github.com/DuncanRuns/Julti/releases/latest/download/Julti.zip"
+      "downloadLink": "https://github.com/DuncanRuns/Julti/releases/download/v1.5.5/Julti-1.5.5.jar"
     },
     {
       "name": "AutoHotkey (AHK)",
@@ -10,39 +10,39 @@
     },
     {
       "name": "OBS Studio",
-      "downloadLink": "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-27.1.3-Full-Installer-x64.exe"
+      "downloadLink": "https://github.com/obsproject/obs-studio/releases/download/30.2.3/OBS-Studio-30.2.3-Windows-Installer.exe"
     },
     {
       "name": "MultiMC",
-      "downloadLink": "https://github.com/MultiMC/Launcher/releases/latest/download/MultiMC.zip"
+      "downloadLink": "https://files.multimc.org/downloads/mmc-develop-win32.zip"
     },
     {
       "name": "MultiMC Offline",
-      "downloadLink": "https://github.com/Ponywka/MultiMC5-with-offline/releases/latest/download/OfflineMultiMC.zip"
+      "downloadLink": "https://github.com/Ponywka/MultiMC5-with-offline/releases/download/0.6.12/MultiMC.zip"
     },
     {
       "name": "Prism Launcher",
-      "downloadLink": "https://github.com/PrismLauncher/PrismLauncher/releases/latest/download/PrismLauncher.zip"
+      "downloadLink": "https://github.com/PrismLauncher/PrismLauncher/releases/download/8.4/PrismLauncher-Windows-MSVC-Setup-8.4.exe"
     },
     {
       "name": "ContariaCalc",
-      "downloadLink": "https://github.com/KingContaria/ContariaCalc/releases/latest/download/ContariaCalc.zip"
+      "downloadLink": "https://github.com/KingContaria/ContariaCalc/releases/download/v1.1.7.1/contariacalcv1.1.7.1.jar"
     },
     {
       "name": "Ninjabrain Bot",
-      "downloadLink": "https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest/download/Ninjabrain-Bot.zip"
+      "downloadLink": "https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/download/1.4.3/Ninjabrain-Bot-1.4.3.jar"
     },
     {
       "name": "ModCheck",
-      "downloadLink": "https://github.com/tildejustin/modcheck/releases/latest/download/modcheck.zip"
+      "downloadLink": "https://github.com/tildejustin/modcheck/releases/download/3.0.2/modcheck-3.0.2.jar"
     },
     {
       "name": "MapCheck",
-      "downloadLink": "https://github.com/cylorun/Map-Check/releases/latest/download/MapCheck.zip"
+      "downloadLink": "https://github.com/cylorun/Map-Check/releases/download/v4.2.0/Map-Check-4.2.0-all.jar"
     },
     {
       "name": "Fabric Updater",
-      "downloadLink": "https://github.com/tildejustin/fabric-updater/releases/latest/download/fabric-updater.zip"
+      "downloadLink": "https://github.com/tildejustin/fabric-updater/releases/download/v1.0.0/fabric-updater-1.0.0.jar"
     }
   ]
 }
