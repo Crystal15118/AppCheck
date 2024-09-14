@@ -16,16 +16,20 @@ dependencies {
 }
 
 application {
-    mainClass = 'me.crystal.main'
+    mainClass = 'me.crystal.Appcheck'
 }
 
 jar {
     manifest {
         attributes(
-                'Main-Class': 'me.crystal.main'
+                'Main-Class': 'me.crystal.AppCheck'
         )
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

@@ -1,2 +1,2 @@
-rootProject.name = 'me crystal'
+rootProject.name = 'AppCheck'
 include('app')
