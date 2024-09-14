@@ -54,7 +54,6 @@ public class AppCheckGUI {
         leftPanel.add(folderTextField);
         topPanel.add(leftPanel, BorderLayout.WEST);
 
-        // Right part: Reconnect button
         JButton reconnectButton = new JButton("Reconnect");
         styleButton(reconnectButton);
         reconnectButton.addActionListener(e -> {
@@ -180,8 +179,12 @@ public class AppCheckGUI {
                 if (component instanceof JCheckBox checkBox) {
                     if (checkBox.isSelected()) {
                         String downloadLink = downloadLinksMap.get(checkBox.getText());
-                        String fileName = Paths.get(new URL(downloadLink).getPath()).getFileName().toString(); // Use original filename
-                        downloadAppWithProgress(downloadLink, downloadFolder, fileName);
+                        String fileName = Paths.get(new URL(downloadLink).getPath()).getFileName().toString();
+                        try {
+                            downloadAppWithProgress(downloadLink, downloadFolder, fileName);
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(progressDialog, "Failed to download: " + checkBox.getText(), "Download Error", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
             }
@@ -206,13 +209,13 @@ public class AppCheckGUI {
                 byte[] dataBuffer = new byte[1024];
                 int bytesRead;
                 int progress;
-                JProgressBar progressBar = (JProgressBar) ((JPanel) progressDialog.getContentPane().getComponent(0)).getComponent(1); // Get progress bar
+                JProgressBar progressBar = (JProgressBar) ((JPanel) progressDialog.getContentPane().getComponent(0)).getComponent(1);
 
                 while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                     fileOutputStream.write(dataBuffer, 0, bytesRead);
                     downloadedBytes += bytesRead;
                     progress = (int) ((downloadedBytes * 100) / totalBytes);
-                    progressBar.setValue(progress); // Update progress
+                    progressBar.setValue(progress);
                     progressBar.setString("Downloaded: " + progress + "%");
                 }
             }
