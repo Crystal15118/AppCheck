@@ -126,7 +126,7 @@ public class AppCheckGUI {
             for (Map.Entry<String, String> entry : downloadLinksMap.entrySet()) {
                 JCheckBox checkBox = new JCheckBox(entry.getKey());
                 checkBox.setBackground(Color.WHITE);
-                checkBox.setForeground(Color.GREEN);
+                checkBox.setForeground(Color.BLACK);
                 contentPanel.add(checkBox);
             }
 
