@@ -5,6 +5,14 @@
       "downloadLink": "https://github.com/DuncanRuns/Julti/releases/download/v1.5.5/Julti-1.5.5.jar"
     },
     {
+      "name": "Jingle",
+      "downloadLink": "https://github.com/DuncanRuns/Jingle/releases/download/v0.3.0/Jingle-0.3.0.jar"
+    },
+    {
+      "name": "AA Tool",
+      "downloadLink": "https://github.com/DarwinBaker/AATool/releases/download/v1.7.5.0-release/Setup.exe"
+    },
+    {
       "name": "AutoHotkey (AHK)",
       "downloadLink": "https://www.autohotkey.com/download/ahk-install.exe"
     },
