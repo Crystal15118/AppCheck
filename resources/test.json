@@ -1,0 +1,10 @@
+{
+    "content": [
+        {"type": "title", "text": "ModCheck"},
+        {"type": "text", "text": "Minecraft SpeedRun Mods Auto Installer/Updater"},
+        {"type": "link", "text": "More Information", "url": "https://github.com/pistacium/ModCheck"},
+        {"type": "bold", "text": "Important content goes here."},
+        {"type": "image", "url": "https://cdn.7tv.app/emote/60eefb20119bd109472f7f4b/4x"}
+    ]
+}
+
